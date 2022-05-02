@@ -4,18 +4,24 @@ import customer.Customer;
 import parkingticket.Ticket;
 
 public class TransactionController {
-    private TransactionView transactionView;
-    private Customer customer;
-    private Ticket ticket;
+    private final TransactionView transactionView;
+    private final Customer customer;
+    private final Ticket ticket;
     private double totalAmount;
 
     public TransactionController(TransactionView transactionView, Customer customer, Ticket ticket) {
         this.transactionView = transactionView;
         this.customer = customer;
         this.ticket = ticket;
+        System.out.println();
     }
 
-    public void parkingBill(){
+    public void showTicket(){
+        this.transactionView.generateTicket(this.ticket.getSlotNumber(),this.customer.getVehicle().getVehicleNumber(),
+                this.ticket.getEntryTime(),this.ticket.getExitTime(),this.totalAmount);
+    }
+
+    public void parkingBill(){   //not completed yet
         double discountedPrice;
         double amount = this.customer.getVehicle().getVehicleFirstHourParkingPrice()
                 + this.customer.getVehicle().getVehicleRemainingHourParkingPrice()
@@ -34,8 +40,6 @@ public class TransactionController {
             discountedPrice = 0;
         }
         this.totalAmount = amount + discountedPrice;
-//        return amount + discountedPrice;
-
     }
 
 }

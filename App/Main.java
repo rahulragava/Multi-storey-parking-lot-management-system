@@ -11,6 +11,9 @@ public class Main {
     public static final String BLUE = "\u001B[34m";
     public static final String RESET = "\u001B[0m";
     static Scanner in = new Scanner(System.in);
+    static String adminName = "Rahul";
+    static String adminPasswd = "rahulragava3";
+
     public static void main(String[] args){
         System.out.println("Enter the number of floors: ");
         int numberOfFloors = in.nextInt();
@@ -23,102 +26,163 @@ public class Main {
             floorController.interact();
             floors.put(i,floor);
         }
-        ArrayList<Customer> allCustomer = new ArrayList<>();
-        ArrayList<Ticket> allTicket = new ArrayList<>();
+        HashMap<String, Customer> customers = new HashMap<>();
+        HashMap<String, Ticket> tickets = new HashMap<>();
         CustomerView customerView;
-        Customer customer;
+        Customer customer = null;
         CustomerController customerController;
         Ticket ticket;
         TicketView ticketView;
-        TicketController ticketController = null;
+        TicketController ticketController;
         TransactionView transactionView;
         TransactionController transactionController;
+        ArrayList<Customer> allCustomer = new ArrayList<>();
         int rememberCustomerIndex = -1;
         int hoursInDay = 24;
-
-        while(true)          //not yet finished completely
+        boolean closeParkingSystem = false;
+        while(!closeParkingSystem)
         {
             showInteraction();
-            System.out.println("Enter the choice: (1/2/3/4/5)");
+            System.out.println("Enter the choice: (1/2/3)");
             int choice = in.nextInt();
-            switch(choice)
-            {
-                case 1: //showing the available slots in each floors
-                    showSlots(floors);
-                    System.out.println(BLUE + "Press -1 to go back" + RESET);
-                    int goBack = in.nextInt();
-                    in.nextLine();
-                    if(goBack == -1)
-                        break;
-
-                case 2: //entering customer details. and book a slot
-                   customerView = new CustomerView();
-                   customer = new Customer();
-                   customerController = new CustomerController(customer, customerView);
-                    customerController.interact();
-                    allCustomer.add(customer);
-                   int visitedTimes = Collections.frequency(allCustomer,customer);
-                   customer.setVisitedTimes(visitedTimes);
-                    rememberCustomerIndex+=1;
-                    break;
-
-                case 3: //generate (entry/exit) ticket
-                    showMenu();
-                    System.out.println("(Entry/Exit) ----------> (1/2)");
-                    int choose = in.nextInt();
-                    boolean isWorking = true;
-                    while(isWorking){
-
-                        switch(choose){
-                            case 1 :
-                                ticket = new Ticket();
-                                ticketView = new TicketView();
-                                ticketController = new TicketController(ticket, ticketView, allCustomer.get(rememberCustomerIndex), floors);
-                                if(ticketController.getSlotNumber() == null){
-                                    System.out.println("Sorry, there is no spot available for your vehicle");
-                                    allCustomer.remove(rememberCustomerIndex);
-                                    rememberCustomerIndex--;
-                                }
-                                else{
-                                    ticketController.setEntryTicket();
-                                    allTicket.add(ticket);
-                                    ticketController.showTicket();
-                                }
-                                isWorking = false;
-                                break;
-                            case 2:
-                                allTicket.get(rememberCustomerIndex).setExitTime();
-                                isWorking = false;
-                                break;
-                            default:
-                                System.out.println("Invalid choice try again");
-                                break;
-                        }
+            switch (choice) {
+                case 1 -> { //showing the available slots in each floors
+                    int goBack = 0;
+                    while (goBack != -1) {
+                        showSlots(floors);
+                        System.out.println(BLUE + "Press -1 to go back" + RESET);
+                        goBack = in.nextInt();
+                        in.nextLine();
                     }
-                    break;
-
-                case 4: //reservation for a day
-                    ticket = new Ticket();
-                    ticketView = new TicketView();
-                    ticketController = new TicketController(ticket, ticketView, allCustomer.get(rememberCustomerIndex), floors, hoursInDay);
-                    if(ticketController.getSlotNumber() == null){
-                        System.out.println("Sorry, there is no spot available for your vehicle");
-                        allCustomer.remove(rememberCustomerIndex);
-                        rememberCustomerIndex--;
+                }
+                case 2 -> { //entering customer details. and book a slot
+                    System.out.println("here to park in ? ");
+                    boolean isParkingIn;
+                    isParkingIn = in.nextBoolean();
+                    int choose;
+                    if(isParkingIn){
+                        choose = 1;
+                        customerView = new CustomerView();
+                        customer = new Customer();
+                        customerController = new CustomerController(customer, customerView);
+                        customerController.interact();
+                        customers.put(customer.getMobileNumber(), customer);
+                        allCustomer.add(customer);
+                        int visitedTimes = Collections.frequency(allCustomer, customer);
+                        customer.setVisitedTimes(visitedTimes);
+                        rememberCustomerIndex += 1;
                     }
                     else {
-                        ticketController.setEntryTicket();
-                        ticket.setExitTime();
-                        allTicket.add(ticket);
-                        ticketController.showTicket();
+                        choose = 2;
                     }
-                    break;
+                    showCustomerInteraction();
+                    System.out.println();
+                    int booking = in.nextInt();
+                    switch (booking) {
+                        case 1 -> { //(booking/reservation)
+                            boolean isWorking = true;
+                            while (isWorking) {
+                                ticket = new Ticket();
+                                ticketView = new TicketView();
+                                ticketController = new TicketController(ticket, ticketView, customer, floors);
+                                switch (choose) {
+                                    case 1 -> { //entry booking
+                                        if (ticketController.getSlotNumber() == null) {
+                                            System.out.println("Sorry, there is no spot available for your vehicle");
+                                            allCustomer.remove(rememberCustomerIndex);
+                                            customers.remove(customer.getMobileNumber());
+                                            rememberCustomerIndex--;
+                                        } else {
+                                            ticketController.setEntryTicket();
+                                            tickets.put(ticket.getSlotNumber(), ticket);
+                                            int returnBack = 0;
+                                            while (returnBack != -1) {
+                                                ticketController.showTicket();
+                                                System.out.println("Press -1 to go back: ");
+                                                returnBack = in.nextInt();
+                                                in.nextLine();
+                                            }
 
-                case 5: //transaction         ..... not yet completed
-                    transactionView = new TransactionView();
-                    transactionController = new TransactionController(transactionView,
-                            allCustomer.get(rememberCustomerIndex), allTicket.get(rememberCustomerIndex));
+                                        }
+                                        isWorking = false;
+                                    }
+                                    case 2 -> {  //exit
+                                        String customerCheck;
+                                        Customer customer1 = null;
+                                        boolean checkCustomer = true;
+                                        while(checkCustomer){
+                                            System.out.println("Enter your phone number: ");
+                                            customerCheck = in.next();
+                                            if(customers.containsKey(customerCheck)){
+                                                customer1 = customers.get(customerCheck);
+                                                checkCustomer = false;
+                                            }
+                                        }
 
+                                        System.out.println("Enter the correct slot number: ");
+                                        String keySlot = in.next();
+                                        if (tickets.containsKey(keySlot)){
+                                            Ticket ticket1 = tickets.get(keySlot);
+                                            ticket1.setExitTime();
+                                            System.out.println("******** Transaction details ******** ");
+                                            transactionView = new TransactionView();
+                                            transactionController = new TransactionController(transactionView, customer1, ticket1);
+                                            transactionController.showTicket();
+                                            System.out.println("Thanks for parking! visit again !");
+                                            isWorking = false;
+                                        }
+                                        else{
+                                            System.out.println("Invalid slot number");
+                                        }
+                                    }
+                                    default -> System.out.println("Invalid choice try again");
+                                }
+                            }
+                        }
+                        case 2 -> {  //reservation
+                            ticket = new Ticket();
+                            ticketView = new TicketView();
+                            ticketController = new TicketController(ticket, ticketView, customer, floors, hoursInDay);
+                            if (ticketController.getSlotNumber() == null) {
+                                System.out.println("Sorry, there is no spot available for your vehicle");
+                            } else {
+                                ticketController.setEntryTicket();
+                                ticket.setExitTime();
+                                tickets.put(ticket.getSlotNumber(), ticket);
+                                ticketController.showTicket();
+                            }
+                            System.out.println("******** Transaction details ******** ");
+                            transactionView = new TransactionView();
+                            transactionController = new TransactionController(transactionView, customer, ticket);
+                            transactionController.parkingBill();
+                            transactionController.showTicket();
+                            System.out.println("Thanks for parking...visit again !");
+                        }
+
+                        default -> System.out.println("Invalid data");
+                    }
+                }
+
+                case 3 -> {                    // admin to close the system
+                    boolean isAdmin = false;
+                    while(!isAdmin){
+                        System.out.println("Enter your name: ");
+                        String checkName = in.next();
+                        System.out.println("Enter password: ");
+                        String checkPasswd = in.next();
+                        if(checkName.equalsIgnoreCase(adminName) && checkPasswd.equals(adminPasswd)){
+                            System.out.println("captcha to check you are not a robot :");
+                            String captcha = generateCaptcha();
+                            System.out.println("captcha : " + captcha);
+                            String checkCaptcha = in.next();
+                            if (captcha.equals(checkCaptcha)) {
+                                isAdmin = true;
+                            }
+                        }
+                    }
+                    System.out.println("want to close the system ? (true/false)");
+                    closeParkingSystem = in.nextBoolean();
+                }
             }
 
         }
@@ -143,10 +207,15 @@ public class Main {
         System.out.println("+---------------------------------+");
         System.out.println("| 1. See available slots          |");
         System.out.println("| 2. Customer details             |");
-        System.out.println("| 3. (Entry/Exit) ticket          |");
-        System.out.println("| 4. Reserve a slot for whole day |");
-        System.out.println("| 5. Transaction                  |");
+        System.out.println("| 3. Admin                        |");
         System.out.println("+---------------------------------+");
+    }
+
+    private static void showCustomerInteraction() {
+        System.out.println("* * * * * * * * * * * * * * * * * * * * * * * * * ");
+        System.out.println("*        1. (Entry/Exit) ticket                  *");
+        System.out.println("*        2. Reserve a slot for whole day         *");
+        System.out.println("* * * * * * * * * * * * * * * * * * * * * * * * * ");
     }
 
     public static void showMenu(){
@@ -155,5 +224,17 @@ public class Main {
         System.out.println("*         2. exit  ticket                       * ");
         System.out.println("* * * * * * * * * * * * * * * * * * * * * * * * * ");
 
+    }
+    public static String generateCaptcha() {
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 5;
+        Random random = new Random();
+
+        return random.ints(leftLimit, rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
     }
 }

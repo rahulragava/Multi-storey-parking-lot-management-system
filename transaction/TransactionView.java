@@ -3,7 +3,7 @@ package transaction;
 public class TransactionView {
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_RESET = "\u001B[0m";
-    public void generateTicket(String slotNumber, String vehicleNumber, String entryTime, String exitTime){
+    public void generateTicket(String slotNumber, String vehicleNumber, String entryTime, String exitTime, double totalAmount){
         System.out.println("+----------------------------------------------+");
         System.out.println("|               PARKING TICKET                 |");
         System.out.println("+----------------------------------------------+");
@@ -16,13 +16,15 @@ public class TransactionView {
         System.out.println();
         System.out.printf("|  Exit time      :      %-10s            |",exitTime);
         System.out.println();
+        System.out.printf("|  Total amount   :      %-10s            |",totalAmount);
+        System.out.println();
         System.out.println("+----------------------------------------------+");
 
         int totalHour = Integer.parseInt(exitTime.substring(0,2)) - Integer.parseInt(entryTime.substring(0,2));
         if(entryTime.equals(exitTime)){
             totalHour = 24;
         }
-        System.out.printf("| Total hours    :     %10s          |", totalHour);
+        System.out.printf("| Total hours    :     %10s               |", totalHour);
         System.out.println();
 
     }

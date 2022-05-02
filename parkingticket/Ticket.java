@@ -23,9 +23,6 @@ public class Ticket {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         this.exitTime =  sdf.format(cal.getTime());
     }
-//    public void setExitTime(String exitTime){
-//        this.exitTime = exitTime;
-//    }
 
     public String getSlotNumber(){
         return this.slotNumber;
