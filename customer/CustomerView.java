@@ -24,13 +24,20 @@ public class CustomerView {
             }
         }
         System.out.print("The type of the vehicle you are going to park?(bus/car/bike)");
+        outerLoop:
         while(true){
             vehicleType = in.next();
             if (vehicleType.equalsIgnoreCase("bus") ||
                     vehicleType.equalsIgnoreCase("bike") || vehicleType.equalsIgnoreCase("car")){
-                System.out.print("Enter your vehicle number: ");
-                vehicleNumber = in.next();
-                break;
+                while(true){
+                    System.out.print("Enter your vehicle number: ");
+                    vehicleNumber = in.next();
+                    if(vehicleNumber.length() == 10 && vehicleNumber.startsWith("TN"))
+                        break outerLoop;
+                    else{
+                        System.out.println("Unauthorized vehicle number. enter the valid vehicle number");
+                    }
+                }
             }
             else{
                 System.out.println("invalid input");

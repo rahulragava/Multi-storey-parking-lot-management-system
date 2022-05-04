@@ -24,8 +24,10 @@ public class TransactionView {
         if(entryTime.equals(exitTime)){
             totalHour = 24;
         }
-        System.out.printf("| Total hours    :     %10s               |", totalHour);
+        System.out.println("+----------------------------------------------+");
+        System.out.printf("| Total hours    :     %10s              |", totalHour);
         System.out.println();
+        System.out.println("+----------------------------------------------+");
 
     }
 

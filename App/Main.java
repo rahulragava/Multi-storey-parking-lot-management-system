@@ -16,7 +16,19 @@ public class Main {
 
     public static void main(String[] args){
         System.out.println("Enter the number of floors: ");
-        int numberOfFloors = in.nextInt();
+        int numberOfFloors = 0;
+        boolean isMismatch = true;
+        while(isMismatch){
+            try {
+                numberOfFloors = in.nextInt();
+                isMismatch = false;
+            }
+            catch (InputMismatchException ime){
+                System.out.println("invalid number");
+                in.reset();
+                in.next();
+            }
+        }
         in.nextLine();
         HashMap<Integer, ParkingFloor> floors = new HashMap<>();
         for(int i = 0; i < numberOfFloors; i++){
@@ -44,7 +56,19 @@ public class Main {
         {
             showInteraction();
             System.out.println("Enter the choice: (1/2/3)");
-            int choice = in.nextInt();
+            isMismatch = true;
+            int choice = 0;
+            while(isMismatch){
+                try {
+                    choice = in.nextInt();
+                    isMismatch = false;
+                }
+                catch (InputMismatchException ime){
+                    System.out.println("invalid number");
+                    in.reset();
+                    in.next();
+                }
+            }
             switch (choice) {
                 case 1 -> { //showing the available slots in each floors
                     int goBack = 0;
@@ -56,28 +80,51 @@ public class Main {
                     }
                 }
                 case 2 -> { //entering customer details. and book a slot
-                    System.out.println("here to park in ? ");
-                    boolean isParkingIn;
-                    isParkingIn = in.nextBoolean();
-                    int choose;
-                    if(isParkingIn){
-                        choose = 1;
-                        customerView = new CustomerView();
-                        customer = new Customer();
-                        customerController = new CustomerController(customer, customerView);
-                        customerController.interact();
-                        customers.put(customer.getMobileNumber(), customer);
-                        allCustomer.add(customer);
-                        int visitedTimes = Collections.frequency(allCustomer, customer);
-                        customer.setVisitedTimes(visitedTimes);
-                        rememberCustomerIndex += 1;
+                    System.out.println("✨✨  Zoho's multi storey parking system welcomes you ✨✨");
+                    boolean isEverythingOk = true;
+                    int choose = 0;
+                    while(isEverythingOk){
+                        System.out.println("Here to park in ? (y/n)");
+                        String isParkingIn = in.next();
+                        if(isParkingIn.equalsIgnoreCase("y")){
+                            choose = 1;
+                            customerView = new CustomerView();
+                            customer = new Customer();
+                            customerController = new CustomerController(customer, customerView);
+                            customerController.interact();
+                            customers.put(customer.getMobileNumber(), customer);
+                            allCustomer.add(customer);
+                            int visitedTimes = Collections.frequency(allCustomer, customer);
+                            customer.setVisitedTimes(visitedTimes);
+                            rememberCustomerIndex += 1;
+                            isEverythingOk = false;
+                        }
+                        else if(isParkingIn.equalsIgnoreCase("n")){
+                            choose = 2;
+                            isEverythingOk = false;
+                        }
+                        else{
+                            System.out.println("Invalid Input. please try again.");
+                            choose = -1;
+                        }
+
                     }
-                    else {
-                        choose = 2;
-                    }
+
                     showCustomerInteraction();
                     System.out.println();
-                    int booking = in.nextInt();
+                    int booking = 0;
+                    isMismatch = true;
+                    while(isMismatch){
+                        try {
+                            booking = in.nextInt();
+                            isMismatch = false;
+                        }
+                        catch (InputMismatchException ime){
+                            System.out.println("invalid number");
+                            in.reset();
+                            in.next();
+                        }
+                    }
                     switch (booking) {
                         case 1 -> { //(booking/reservation)
                             boolean isWorking = true;
@@ -87,14 +134,18 @@ public class Main {
                                 ticketController = new TicketController(ticket, ticketView, customer, floors);
                                 switch (choose) {
                                     case 1 -> { //entry booking
-                                        if (ticketController.getSlotNumber() == null) {
+                                        String parkingSlotNumber = ticketController.getSlotNumber();
+
+
+                                        if (parkingSlotNumber == null) {
                                             System.out.println("Sorry, there is no spot available for your vehicle");
                                             allCustomer.remove(rememberCustomerIndex);
                                             customers.remove(customer.getMobileNumber());
                                             rememberCustomerIndex--;
                                         } else {
-                                            ticketController.setEntryTicket();
-                                            tickets.put(ticket.getSlotNumber(), ticket);
+                                            ticketController.setEntryTicket(parkingSlotNumber);
+                                            updateEntrySlots(parkingSlotNumber,floors);
+                                            tickets.put(parkingSlotNumber, ticket);
                                             int returnBack = 0;
                                             while (returnBack != -1) {
                                                 ticketController.showTicket();
@@ -117,23 +168,32 @@ public class Main {
                                                 customer1 = customers.get(customerCheck);
                                                 checkCustomer = false;
                                             }
+                                            else{
+                                                System.out.println("wrong number enter the correct number");
+                                            }
+                                        }
+                                        boolean isCorrect = true;
+                                        while(isCorrect){
+                                            System.out.println("Enter the correct slot number: ");
+                                            String keySlot = in.next();
+                                            if (tickets.containsKey(keySlot)){
+                                                Ticket ticket1 = tickets.get(keySlot);
+                                                ticket1.setExitTime();
+                                                updateExitSlots(keySlot,floors);
+                                                System.out.println("******** Transaction details ******** ");
+                                                transactionView = new TransactionView();
+                                                transactionController = new TransactionController(transactionView, customer1, ticket1);
+                                                transactionController.showTicket();
+                                                System.out.println("Thanks for parking! visit again !");
+                                                isWorking = false;
+                                                isCorrect = false;
+                                            }
+                                            else{
+                                                System.out.println("Invalid slot number");
+                                                isWorking = false;
+                                            }
                                         }
 
-                                        System.out.println("Enter the correct slot number: ");
-                                        String keySlot = in.next();
-                                        if (tickets.containsKey(keySlot)){
-                                            Ticket ticket1 = tickets.get(keySlot);
-                                            ticket1.setExitTime();
-                                            System.out.println("******** Transaction details ******** ");
-                                            transactionView = new TransactionView();
-                                            transactionController = new TransactionController(transactionView, customer1, ticket1);
-                                            transactionController.showTicket();
-                                            System.out.println("Thanks for parking! visit again !");
-                                            isWorking = false;
-                                        }
-                                        else{
-                                            System.out.println("Invalid slot number");
-                                        }
                                     }
                                     default -> System.out.println("Invalid choice try again");
                                 }
@@ -143,17 +203,18 @@ public class Main {
                             ticket = new Ticket();
                             ticketView = new TicketView();
                             ticketController = new TicketController(ticket, ticketView, customer, floors, hoursInDay);
-                            if (ticketController.getSlotNumber() == null) {
+                            String parkingSlotNumber = ticketController.getSlotNumber();
+                            if (parkingSlotNumber == null) {
                                 System.out.println("Sorry, there is no spot available for your vehicle");
                             } else {
-                                ticketController.setEntryTicket();
+                                ticketController.setEntryTicket(parkingSlotNumber);
                                 ticket.setExitTime();
-                                tickets.put(ticket.getSlotNumber(), ticket);
-                                ticketController.showTicket();
+                                updateEntrySlots(parkingSlotNumber,floors);
+                                tickets.put(parkingSlotNumber, ticket);
                             }
                             System.out.println("******** Transaction details ******** ");
                             transactionView = new TransactionView();
-                            transactionController = new TransactionController(transactionView, customer, ticket);
+                            transactionController = new TransactionController(transactionView, customer, ticket, hoursInDay);
                             transactionController.parkingBill();
                             transactionController.showTicket();
                             System.out.println("Thanks for parking...visit again !");
@@ -188,13 +249,31 @@ public class Main {
         }
     }
 
+    private static void updateEntrySlots(String parkingSlotNumber, HashMap<Integer, ParkingFloor> floors) {
+        int floorNumber = Integer.parseInt(parkingSlotNumber.substring(2,4));
+        switch (parkingSlotNumber.substring(0, 2)) {
+            case "BI" -> floors.get(floorNumber).setBikeSlots(floors.get(floorNumber).getBikeSlots().length - 1);
+            case "BU" -> floors.get(floorNumber).setBusSlots(floors.get(floorNumber).getBusSlots().length - 1);
+            case "CA" -> floors.get(floorNumber).setCarSlots(floors.get(floorNumber).getCarSlots().length - 1);
+        }
+    }
+
+    private static void updateExitSlots(String parkingSlotNumber, HashMap<Integer, ParkingFloor> floors) {
+        int floorNumber = Integer.parseInt(parkingSlotNumber.substring(2,4));
+        switch (parkingSlotNumber.substring(0, 2)) {
+            case "BI" -> floors.get(floorNumber).setBikeSlots(floors.get(floorNumber).getBikeSlots().length + 1);
+            case "BU" -> floors.get(floorNumber).setBusSlots(floors.get(floorNumber).getBusSlots().length + 1);
+            case "CA" -> floors.get(floorNumber).setCarSlots(floors.get(floorNumber).getCarSlots().length + 1);
+        }
+
+    }
+
     private static void showSlots(HashMap<Integer, ParkingFloor> floors) {
         String leftAlignFormat = "| %-9s | %-9d | %-10d | %-9d|%n";
 
         System.out.format("+-----------+-----------+------------+----------+%n");
         System.out.format("| Floor no. | Car Slots | Bike Slots | Bus Slots|%n");
         System.out.format("+-----------+-----------+------------+----------+%n");
-        Iterator<Integer> itr = floors.keySet().iterator();
         floors.forEach(
                 (floorNumber, floorDetail) ->
                         System.out.format(leftAlignFormat, floorNumber, floorDetail.getCarSlots().length,
@@ -206,7 +285,7 @@ public class Main {
     public static void showInteraction(){
         System.out.println("+---------------------------------+");
         System.out.println("| 1. See available slots          |");
-        System.out.println("| 2. Customer details             |");
+        System.out.println("| 2. Customer                     |");
         System.out.println("| 3. Admin                        |");
         System.out.println("+---------------------------------+");
     }
@@ -217,13 +296,11 @@ public class Main {
         System.out.println("*        2. Reserve a slot for whole day         *");
         System.out.println("* * * * * * * * * * * * * * * * * * * * * * * * * ");
     }
-
     public static void showMenu(){
         System.out.println("* * * * * * * * * * * * * * * * * * * * * * * * * ");
         System.out.println("*         1. entry ticket                       * ");
         System.out.println("*         2. exit  ticket                       * ");
         System.out.println("* * * * * * * * * * * * * * * * * * * * * * * * * ");
-
     }
     public static String generateCaptcha() {
         int leftLimit = 48; // numeral '0'

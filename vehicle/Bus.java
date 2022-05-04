@@ -2,8 +2,8 @@ package vehicle;
 
 public class Bus implements Vehicle {
     String vehicleNumber;
-    int busFirstHourParkingPrice = 30;
-    int busRemainingHourParkingPrice = 40;
+    int busFirstHourParkingPrice = 100;
+    int busRemainingHourParkingPrice =150;
 
     public Bus(String vehicleNumber){
         this.vehicleNumber = vehicleNumber;

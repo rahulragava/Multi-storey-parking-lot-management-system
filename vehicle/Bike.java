@@ -2,8 +2,8 @@ package vehicle;
 
 public class Bike implements Vehicle {
     String vehicleNumber;
-    int bikeFirstHourParkingPrice = 10;
-    int bikeRemainingHourParkingPrice = 20;
+    int bikeFirstHourParkingPrice = 50;
+    int bikeRemainingHourParkingPrice = 70;
 
     public Bike(String vehicleNumber){
         this.vehicleNumber = vehicleNumber;

@@ -1,8 +1,8 @@
 package vehicle;
 
 public class Car implements Vehicle {
-    int carFirstHourParkingPrice = 20;
-    int carRemainingParkingHourPrice = 30;
+    int carFirstHourParkingPrice = 80;
+    int carRemainingParkingHourPrice = 100;
     String vehicleNumber;
 
     public Car(String vehicleNumber){

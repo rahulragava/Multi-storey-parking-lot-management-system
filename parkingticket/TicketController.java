@@ -30,8 +30,8 @@ public class TicketController {
         this.dayHour = dayHour;
     }
 
-    public void setEntryTicket(){
-        this.ticket.setSlotNumber(getSlotNumber());
+    public void setEntryTicket(String parkingSlotNumber){
+        this.ticket.setSlotNumber(parkingSlotNumber);
         this.ticket.setEntryTime(getEntryTime());
         this.ticket.setVehicleNumber(this.customer.getVehicle().getVehicleNumber());
     }
@@ -47,13 +47,13 @@ public class TicketController {
 
     public String getSlotNumber(){
         if (customer.getVehicle().getVehicleType().equalsIgnoreCase("bike")){
-            var floorsSet = floors.entrySet();
+            var floorsSet = floors.keySet();
             for(int i = 0; i < floorsSet.size(); i++){
                 int[] slot = floors.get(i).getBikeSlots();
                 for (int j = 0; j < slot.length; j++){
                    if(slot[j] == 0){
                        slot[j] = 1;
-                       return "BI" + String.valueOf(i) + String.valueOf(j);
+                       return "BI" + "0" + i + "0" + j;
                    }
                 }
             }
@@ -65,7 +65,7 @@ public class TicketController {
                 for (int j = 0; j < slot.length; j++){
                     if(slot[j] == 0){
                         slot[j] = 1;
-                        return "CA" + String.valueOf(i) + String.valueOf(j);
+                        return "CA" + "0" + i + "0" + j;
                     }
                 }
             }
@@ -77,7 +77,7 @@ public class TicketController {
                 for (int j = 0; j < slot.length; j++){
                     if(slot[j] == 0){
                         slot[j] = 1;
-                        return "BU" + String.valueOf(i) + String.valueOf(j);
+                        return "BU" + "0" + i + "0" + j;
                     }
                 }
             }

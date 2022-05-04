@@ -7,7 +7,7 @@ public class TicketView {
         System.out.println("+----------------------------------------------+");
         System.out.println("|               PARKING TICKET                 |");
         System.out.println("+----------------------------------------------+");
-        System.out.println();
+        System.out.println("|                                              |");
         System.out.printf("|  Slot number    :      %-10s            |",slotNumber);
         System.out.println();
         System.out.printf("|  Vehicle number :      %-10s            |",vehicleNumber);
@@ -19,8 +19,6 @@ public class TicketView {
         System.out.println("+----------------------------------------------+");
         if(exitTime.equals("--:--:--")){
             System.out.println();
-            System.out.println();
-            System.out.println();
             System.out.println("+------------------------------------------------------+");
             System.out.println();
             System.out.println(ANSI_YELLOW + "|        PLEASE REMEMBER (SLOT NUMBER/VEHICLE NUMBER)   |" + ANSI_RESET);
@@ -31,8 +29,10 @@ public class TicketView {
             if(entryTime.equals(exitTime)){
                 totalHour = 24;
             }
-            System.out.printf("| Total hours    :     %10s          |", totalHour);
+            System.out.println("+------------------------------------------------------+");
+            System.out.printf("|       Total hours    :     %10s                      |", totalHour);
             System.out.println();
+            System.out.println("+------------------------------------------------------+");
         }
     }
 }
