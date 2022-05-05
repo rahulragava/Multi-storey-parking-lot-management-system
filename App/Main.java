@@ -4,12 +4,11 @@ import customer.*;
 import parkingfloor.*;
 import parkingticket.*;
 import transaction.*;
+import vehicle.*;
 
 import java.util.*;
 
 public class Main {
-    public static final String BLUE = "\u001B[34m";
-    public static final String RESET = "\u001B[0m";
     static Scanner in = new Scanner(System.in);
     static String adminName = "Rahul";
     static String adminPasswd = "rahulragava3";
@@ -70,16 +69,16 @@ public class Main {
                 }
             }
             switch (choice) {
-                case 1 -> { //showing the available slots in each floors
+                case 1 -> {                                //showing the available slots in each floors
                     int goBack = 0;
                     while (goBack != -1) {
                         showSlots(floors);
-                        System.out.println(BLUE + "Press -1 to go back" + RESET);
+                        System.out.println("Press -1 to go back");
                         goBack = in.nextInt();
                         in.nextLine();
                     }
                 }
-                case 2 -> { //entering customer details. and book a slot
+                case 2 -> {                                  //entering customer details. and book a slot
                     System.out.println("✨✨  Zoho's multi storey parking system welcomes you ✨✨");
                     boolean isEverythingOk = true;
                     int choose = 0;
@@ -107,9 +106,7 @@ public class Main {
                             System.out.println("Invalid Input. please try again.");
                             choose = -1;
                         }
-
                     }
-
                     showCustomerInteraction();
                     System.out.println();
                     int booking = 0;
@@ -153,7 +150,6 @@ public class Main {
                                                 returnBack = in.nextInt();
                                                 in.nextLine();
                                             }
-
                                         }
                                         isWorking = false;
                                     }
@@ -241,12 +237,215 @@ public class Main {
                             }
                         }
                     }
-                    System.out.println("want to close the system ? (true/false)");
-                    closeParkingSystem = in.nextBoolean();
+                    System.out.println("        ***** Welcome Admin *****");
+                    loop:
+                    while(true){
+                        isMismatch = true;
+                        int adminChoice = 0;
+                        showAdminMenu();
+                        while(isMismatch){
+                            try {
+                                System.out.println("Enter your choice: (1/2)");
+                                adminChoice = in.nextInt();
+                                isMismatch = false;
+                            }
+                            catch (InputMismatchException ime){
+                                System.out.println("invalid number");
+                                in.reset();
+                                in.next();
+                            }
+                        }
+                        switch (adminChoice){
+                         case 1 ->{
+                             System.out.println("select the vehicle you want to change the ticket fair, mr.admin");
+                             isMismatch = true;
+                             int internalChoice = 0;
+                             showVehicleMenu();
+                             while(isMismatch) {
+                                 try {
+                                     System.out.println("Enter your choice: (1/2/3)");
+                                     internalChoice = in.nextInt();
+                                     isMismatch = false;
+                                 }
+                                 catch(InputMismatchException ime){
+                                     System.out.println("invalid number");
+                                     in.reset();
+                                     in.next();
+                                 }
+                             }
+                             switch (internalChoice){
+                                 case 1 -> {
+                                     isMismatch = true;
+                                     while(isMismatch) {
+                                         try {
+                                             System.out.println("press 1 to change first hour rate of bike parking");
+                                             System.out.println("press 2 to change remaining hours rate of bike parking");
+                                             internalChoice = in.nextInt();
+                                             isMismatch = false;
+                                         } catch (InputMismatchException ime) {
+                                             System.out.println("invalid number");
+                                             in.reset();
+                                             in.next();
+                                         }
+                                     }
+                                     if(internalChoice == 1){
+                                         System.out.println("current bike's first hour parking fair" + Bike.bikeFirstHourParkingPrice);
+                                         isMismatch = true;
+                                         while(isMismatch) {
+                                             try {
+                                                 System.out.println("Enter the amount the bikes first hour rate should be: ");
+                                                 Bike.bikeFirstHourParkingPrice = in.nextInt();
+                                                 isMismatch = false;
+                                             } catch (InputMismatchException ime) {
+                                                 System.out.println("invalid number");
+                                                 in.reset();
+                                                 in.next();
+                                             }
+                                         }
+                                         System.out.println("Bike's first hour parking price is changed to :" + Bike.bikeFirstHourParkingPrice);
+                                     }
+                                     if(internalChoice == 2){
+                                         System.out.println("current bike's first hour parking fair" + Bike.bikeRemainingHourParkingPrice);
+                                         isMismatch = true;
+                                         while(isMismatch) {
+                                             try {
+                                                 System.out.println("Enter the amount the bikes remaining hours rate should be: ");
+                                                 Bike.bikeRemainingHourParkingPrice = in.nextInt();
+                                                 isMismatch = false;
+                                             } catch (InputMismatchException ime) {
+                                                 System.out.println("invalid number");
+                                                 in.reset();
+                                                 in.next();
+                                             }
+                                         }
+                                         System.out.println("Bike's remaining hours parking price is changed to :" + Bike.bikeRemainingHourParkingPrice);
+                                     }
+                                 }
+                                 case 2 -> {
+                                     isMismatch = true;
+                                     while(isMismatch) {
+                                         try {
+                                             System.out.println("press 1 to change first hour rate of car parking");
+                                             System.out.println("press 2 to change remaining hours rate of car parking");
+                                             internalChoice = in.nextInt();
+                                             isMismatch = false;
+                                         } catch (InputMismatchException ime) {
+                                             System.out.println("invalid number");
+                                             in.reset();
+                                             in.next();
+                                         }
+                                     }
+                                     if(internalChoice == 1){
+                                         System.out.println("current car's first hour parking fair" + Car.carFirstHourParkingPrice);
+                                         isMismatch = true;
+                                         while(isMismatch) {
+                                             try {
+                                                 System.out.println("Enter the amount the car's first hour rate should be: ");
+                                                 Car.carFirstHourParkingPrice = in.nextInt();
+                                                 isMismatch = false;
+                                             } catch (InputMismatchException ime) {
+                                                 System.out.println("invalid number");
+                                                 in.reset();
+                                                 in.next();
+                                             }
+                                         }
+                                         System.out.println("car's first hour parking price is changed to : " + Car.carFirstHourParkingPrice);
+                                     }
+                                     if(internalChoice == 2){
+                                         System.out.println("current bike's first hour parking fair" + Bike.bikeRemainingHourParkingPrice);
+                                         isMismatch = true;
+                                         while(isMismatch) {
+                                             try {
+                                                 System.out.println("Enter the amount the bikes remaining hours rate should be: ");
+                                                 Bike.bikeRemainingHourParkingPrice = in.nextInt();
+                                                 isMismatch = false;
+                                             } catch (InputMismatchException ime) {
+                                                 System.out.println("invalid number");
+                                                 in.reset();
+                                                 in.next();
+                                             }
+                                         }
+                                         System.out.println("car's remaining hours parking price is changed to : " + Car.carRemainingParkingHourPrice);
+                                     }
+                                 }
+                                 case 3 -> {
+                                     isMismatch = true;
+                                     while(isMismatch) {
+                                         try {
+                                             System.out.println("press 1 to change first hour rate of bus parking");
+                                             System.out.println("press 2 to change remaining hours rate of bus parking");
+                                             internalChoice = in.nextInt();
+                                             isMismatch = false;
+                                         } catch (InputMismatchException ime) {
+                                             System.out.println("invalid number");
+                                             in.reset();
+                                             in.next();
+                                         }
+                                     }
+                                     if(internalChoice == 1){
+                                         System.out.println("current bus's first hour parking fair" + Bus.busFirstHourParkingPrice);
+                                         isMismatch = true;
+                                         while(isMismatch) {
+                                             try {
+                                                 System.out.println("Enter the amount the bus's first hour rate should be: ");
+                                                 Bus.busFirstHourParkingPrice = in.nextInt();
+                                                 isMismatch = false;
+                                             } catch (InputMismatchException ime) {
+                                                 System.out.println("invalid number");
+                                                 in.reset();
+                                                 in.next();
+                                             }
+                                         }
+                                         System.out.println("bus's first hour parking price is changed to : " + Bus.busFirstHourParkingPrice);
+                                     }
+                                     if(internalChoice == 2){
+                                         System.out.println("current bus's first hour parking fair" + Bus.busFirstHourParkingPrice);
+                                         isMismatch = true;
+                                         while(isMismatch) {
+                                             try {
+                                                 System.out.println("Enter the amount the bus remaining hours rate should be: ");
+                                                 Bus.busFirstHourParkingPrice = in.nextInt();
+                                                 isMismatch = false;
+                                             } catch (InputMismatchException ime) {
+                                                 System.out.println("invalid number");
+                                                 in.reset();
+                                                 in.next();
+                                             }
+                                         }
+                                         System.out.println("bus's remaining hours parking price is changed to : " + Bus.busRemainingHourParkingPrice);
+                                     }
+                                 }
+                             }
+                         }
+                         case 2 ->{
+
+                             try{
+                                 System.out.println("want to close the system ? (true/false)");
+                                 closeParkingSystem = in.nextBoolean();
+                                 break loop;
+                             }
+                             catch (InputMismatchException ime){
+                                 System.out.println("Invalid input");
+                                 in.reset();
+                                 in.next();
+                             }
+                         }
+                        default -> System.out.println("Invalid input");
+                        }
+                    }
                 }
+                default -> System.out.println("Invalid input");
             }
 
         }
+    }
+
+
+    private static void showAdminMenu() {
+        System.out.println("+---------------------------------+");
+        System.out.println("| 1. change vehicle's hourly rate |");
+        System.out.println("| 2. Close the system             |");
+        System.out.println("+---------------------------------+");
     }
 
     private static void updateEntrySlots(String parkingSlotNumber, HashMap<Integer, ParkingFloor> floors) {
@@ -265,7 +464,6 @@ public class Main {
             case "BU" -> floors.get(floorNumber).setBusSlots(floors.get(floorNumber).getBusSlots().length + 1);
             case "CA" -> floors.get(floorNumber).setCarSlots(floors.get(floorNumber).getCarSlots().length + 1);
         }
-
     }
 
     private static void showSlots(HashMap<Integer, ParkingFloor> floors) {
@@ -279,7 +477,6 @@ public class Main {
                         System.out.format(leftAlignFormat, floorNumber, floorDetail.getCarSlots().length,
                                 floorDetail.getBikeSlots().length, floorDetail.getBusSlots().length));
         System.out.format("+-----------+-----------+------------+----------+%n");
-
     }
 
     public static void showInteraction(){
@@ -314,4 +511,12 @@ public class Main {
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
     }
+    private static void showVehicleMenu() {
+        System.out.println("* * * * * * * * * * * * * * * * * * * * * * * * * ");
+        System.out.println("*         1. Change Bike fair                   * ");
+        System.out.println("*         2. Change Car fair                    * ");
+        System.out.println("*         3. Change Bus fair                    * ");
+        System.out.println("* * * * * * * * * * * * * * * * * * * * * * * * * ");
+    }
 }
+

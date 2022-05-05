@@ -2,8 +2,8 @@ package vehicle;
 
 public class Bike implements Vehicle {
     String vehicleNumber;
-    int bikeFirstHourParkingPrice = 50;
-    int bikeRemainingHourParkingPrice = 70;
+    public static int bikeFirstHourParkingPrice = 50;
+    public static int bikeRemainingHourParkingPrice = 70;
 
     public Bike(String vehicleNumber){
         this.vehicleNumber = vehicleNumber;
@@ -20,12 +20,12 @@ public class Bike implements Vehicle {
 
     @Override
     public int getVehicleFirstHourParkingPrice() {
-        return this.bikeFirstHourParkingPrice;
+        return bikeFirstHourParkingPrice;
     }
 
     @Override
     public int getVehicleRemainingHourParkingPrice() {
-        return this.bikeRemainingHourParkingPrice;
+        return bikeRemainingHourParkingPrice;
     }
 
 }
