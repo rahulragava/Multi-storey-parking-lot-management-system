@@ -3,7 +3,8 @@ package transaction;
 public class TransactionView {
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_RESET = "\u001B[0m";
-    public void generateTicket(String slotNumber, String vehicleNumber, String entryTime, String exitTime, double totalAmount){
+    public void generateTicket(String slotNumber, String vehicleNumber, String entryTime, String exitTime, double totalAmount, int visitedTimes){
+        String isDiscount = (visitedTimes == 1) ? "yes" : "No";
         System.out.println("+----------------------------------------------+");
         System.out.println("|               PARKING TICKET                 |");
         System.out.println("+----------------------------------------------+");
@@ -15,6 +16,8 @@ public class TransactionView {
         System.out.printf("|  Entry time     :      %-10s            |",entryTime);
         System.out.println();
         System.out.printf("|  Exit time      :      %-10s            |",exitTime);
+        System.out.println();
+        System.out.printf("|  has Discount   :      %-10s            |",isDiscount);
         System.out.println();
         System.out.printf("|  Total amount   :      %-10s            |",totalAmount);
         System.out.println();

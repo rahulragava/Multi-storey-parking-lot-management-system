@@ -26,7 +26,7 @@ public class TransactionController {
 
     public void showTicket(){
         this.transactionView.generateTicket(this.ticket.getSlotNumber(),this.customer.getVehicle().getVehicleNumber(),
-                this.ticket.getEntryTime(),this.ticket.getExitTime(),this.totalAmount);
+                this.ticket.getEntryTime(),this.ticket.getExitTime(),this.totalAmount, customer.getVisitedTimes());
     }
 
     public void parkingBill(){   //not completed yet

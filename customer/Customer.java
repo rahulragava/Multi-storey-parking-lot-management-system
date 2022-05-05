@@ -6,7 +6,7 @@ public class Customer {
     private String name;
     private String mobileNumber;
     private Vehicle vehicle;
-    private int visitedTimes;
+    private int visitedTimes = 0;
 
     //setters
     public void setMobileNumber(String mobileNumber) {

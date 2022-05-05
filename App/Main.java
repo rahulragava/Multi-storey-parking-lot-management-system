@@ -47,8 +47,7 @@ public class Main {
         TicketController ticketController;
         TransactionView transactionView;
         TransactionController transactionController;
-        ArrayList<Customer> allCustomer = new ArrayList<>();
-        int rememberCustomerIndex = -1;
+        int visitedTimes = 0;
         int hoursInDay = 24;
         boolean closeParkingSystem = false;
         while(!closeParkingSystem)
@@ -91,11 +90,15 @@ public class Main {
                             customer = new Customer();
                             customerController = new CustomerController(customer, customerView);
                             customerController.interact();
+                            if(customers.containsKey(customer.getMobileNumber())){
+                                visitedTimes++;
+                                customer.setVisitedTimes(visitedTimes);
+                            }
+                            else{
+                                visitedTimes = 1;
+                                customer.setVisitedTimes(visitedTimes);
+                            }
                             customers.put(customer.getMobileNumber(), customer);
-                            allCustomer.add(customer);
-                            int visitedTimes = Collections.frequency(allCustomer, customer);
-                            customer.setVisitedTimes(visitedTimes);
-                            rememberCustomerIndex += 1;
                             isEverythingOk = false;
                         }
                         else if(isParkingIn.equalsIgnoreCase("n")){
@@ -136,10 +139,9 @@ public class Main {
 
                                         if (parkingSlotNumber == null) {
                                             System.out.println("Sorry, there is no spot available for your vehicle");
-                                            allCustomer.remove(rememberCustomerIndex);
                                             customers.remove(customer.getMobileNumber());
-                                            rememberCustomerIndex--;
-                                        } else {
+                                        }
+                                        else {
                                             ticketController.setEntryTicket(parkingSlotNumber);
                                             updateEntrySlots(parkingSlotNumber,floors);
                                             tickets.put(parkingSlotNumber, ticket);
@@ -163,6 +165,39 @@ public class Main {
                                             if(customers.containsKey(customerCheck)){
                                                 customer1 = customers.get(customerCheck);
                                                 checkCustomer = false;
+                                                Random random = new Random();
+                                                int generatingOtp = random.nextInt(1000,10000);
+                                                showInMobile(generatingOtp);
+//                                                isMismatch = true;
+//                                                int typeOtp;
+                                                int typeOtp = 0;
+//                                                int looping = 5;
+                                                while(true){
+                                                    isMismatch = true;
+                                                    while(isMismatch){
+                                                        try {
+                                                            System.out.println("Enter the otp : ");
+                                                            typeOtp = in.nextInt();
+                                                            isMismatch = false;
+                                                        }
+                                                        catch (InputMismatchException ime){
+                                                            System.out.println("invalid number");
+                                                            in.reset();
+                                                            in.next();
+                                                        }
+                                                    }
+                                                    if(typeOtp == generatingOtp){
+                                                        System.out.println("Welcome back " + customer1.getName());
+                                                        break;
+                                                    }
+                                                    else{
+                                                        System.out.println("Wrong otp");
+                                                    }
+
+                                                }
+
+
+
                                             }
                                             else{
                                                 System.out.println("wrong number enter the correct number");
@@ -170,7 +205,7 @@ public class Main {
                                         }
                                         boolean isCorrect = true;
                                         while(isCorrect){
-                                            System.out.println("Enter the correct slot number: ");
+                                            System.out.println("Enter the correct ticket number: ");
                                             String keySlot = in.next();
                                             if (tickets.containsKey(keySlot)){
                                                 Ticket ticket1 = tickets.get(keySlot);
@@ -274,7 +309,7 @@ public class Main {
                                  }
                              }
                              switch (internalChoice){
-                                 case 1 -> {
+                                 case 1 -> { //admin changing bike fair
                                      isMismatch = true;
                                      while(isMismatch) {
                                          try {
@@ -321,7 +356,7 @@ public class Main {
                                          System.out.println("Bike's remaining hours parking price is changed to :" + Bike.bikeRemainingHourParkingPrice);
                                      }
                                  }
-                                 case 2 -> {
+                                 case 2 -> { // admin changing car fair
                                      isMismatch = true;
                                      while(isMismatch) {
                                          try {
@@ -368,7 +403,7 @@ public class Main {
                                          System.out.println("car's remaining hours parking price is changed to : " + Car.carRemainingParkingHourPrice);
                                      }
                                  }
-                                 case 3 -> {
+                                 case 3 -> {      // admin changing bus fair
                                      isMismatch = true;
                                      while(isMismatch) {
                                          try {
@@ -417,7 +452,7 @@ public class Main {
                                  }
                              }
                          }
-                         case 2 ->{
+                         case 2 ->{ //to close the system
 
                              try{
                                  System.out.println("want to close the system ? (true/false)");
@@ -517,6 +552,29 @@ public class Main {
         System.out.println("*         2. Change Car fair                    * ");
         System.out.println("*         3. Change Bus fair                    * ");
         System.out.println("* * * * * * * * * * * * * * * * * * * * * * * * * ");
+    }
+
+    private static void showInMobile(int generatingOtp) {
+        System.out.println("              mobile phone                    ");
+        System.out.println("        * * * * * * * * * * * * *             ");
+        System.out.println("        *                       *             ");
+        System.out.println("        *                       *             ");
+        System.out.println("        *      OTP RECEIVED     *             ");
+        System.out.printf( "        *          %d          *             ",generatingOtp);
+        System.out.println();
+        System.out.println("        *                       *             ");
+        System.out.println("        *                       *             ");
+        System.out.println("        *                       *             ");
+        System.out.println("        * * * * * * * * * * * * *             ");
+        System.out.println("        * * * * * * * * * * * * *             ");
+        System.out.println("        * * * * * * * * * * * * *             ");
+        System.out.println("        * * * * * * * * * * * * *             ");
+        System.out.println("        * * * * * * * * * * * * *             ");
+        System.out.println("        * * * * * * * * * * * * *             ");
+        System.out.println("        * * * * * * * * * * * * *             ");
+        System.out.println("        * * * * * * * * * * * * *             ");
+        System.out.println("        * * * * * * * * * * * * *             ");
+
     }
 }
 
