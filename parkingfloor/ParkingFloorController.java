@@ -15,7 +15,7 @@ public class ParkingFloorController {
         this.floor.setFloorSpace(this.floorView.spaces);
         this.floor.setBikeSlots((int)(this.floorView.spaces * 40 / 100));
         this.floor.setCarSlots((int)(this.floorView.spaces * 40 / 100));
-        this.floor.setBusSlots((int)(this.floorView.spaces * 20/100));
+        this.floor.setBusSlots((this.floorView.spaces - (this.getBikeCapacity().length + this.getCarCapacity().length)));
     }
 
     public int getFloorSpace(){

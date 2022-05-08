@@ -3,8 +3,8 @@ package customer;
 import vehicle.*;
 
 public class CustomerController {
-    private CustomerView view;
-    private Customer customer;
+    private final CustomerView view;
+    private final Customer customer;
     private Vehicle vehicle;
     private int visitedTimes;
 

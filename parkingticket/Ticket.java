@@ -36,6 +36,4 @@ public class Ticket {
     public String getVehicleNumber() {
         return vehicleNumber;
     }
-
-
 }

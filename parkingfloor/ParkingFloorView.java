@@ -24,7 +24,6 @@ public class ParkingFloorView {
                         System.out.println("give at least 5 spaces");
                     }
                     isMismatch = false;
-
                 }
             }
             catch (InputMismatchException ime){

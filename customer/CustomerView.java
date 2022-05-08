@@ -43,7 +43,7 @@ public class CustomerView {
                 System.out.println("invalid input");
             }
         }
-        vehicle = vehicleType.equalsIgnoreCase("bike") ?    //dip data binding
+        vehicle = vehicleType.equalsIgnoreCase("bike") ?    //dynamic binding
                 new Bike(vehicleNumber) : vehicleType.equalsIgnoreCase("car") ? new Car(vehicleNumber) : new Bus(vehicleNumber);
     }
 }

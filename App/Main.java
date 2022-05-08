@@ -53,7 +53,7 @@ public class Main {
         while(!closeParkingSystem)
         {
             showInteraction();
-            System.out.println("Enter the choice: (1/2/3)");
+            System.out.println("Enter the choice: (1/2/3/4)");
             isMismatch = true;
             int choice = 0;
             while(isMismatch){
@@ -168,10 +168,7 @@ public class Main {
                                                 Random random = new Random();
                                                 int generatingOtp = random.nextInt(1000,10000);
                                                 showInMobile(generatingOtp);
-//                                                isMismatch = true;
-//                                                int typeOtp;
                                                 int typeOtp = 0;
-//                                                int looping = 5;
                                                 while(true){
                                                     isMismatch = true;
                                                     while(isMismatch){
@@ -255,7 +252,7 @@ public class Main {
                     }
                 }
 
-                case 3 -> {                    // admin to close the system
+                case 3 -> {                    // admin to change parking price in the system
                     boolean isAdmin = false;
                     while(!isAdmin){
                         System.out.println("Enter your name: ");
@@ -452,26 +449,30 @@ public class Main {
                                  }
                              }
                          }
-                         case 2 ->{ //to close the system
-
-                             try{
-                                 System.out.println("want to close the system ? (true/false)");
-                                 closeParkingSystem = in.nextBoolean();
-                                 break loop;
-                             }
-                             catch (InputMismatchException ime){
-                                 System.out.println("Invalid input");
-                                 in.reset();
-                                 in.next();
-                             }
-                         }
+//                         case 2 ->{ //to close the system
+//
+//                             try{
+//                                 System.out.println("want to close the system ? (true/false)");
+//                                 closeParkingSystem = in.nextBoolean();
+//                                 break loop;
+//                             }
+//                             catch (InputMismatchException ime){
+//                                 System.out.println("Invalid input");
+//                                 in.reset();
+//                                 in.next();
+//                             }
+//                         }
+                            case 2 -> {
+                                break loop;
+                            }
                         default -> System.out.println("Invalid input");
                         }
                     }
                 }
+                case 4 -> closeParkingSystem = true;
+
                 default -> System.out.println("Invalid input");
             }
-
         }
     }
 
@@ -479,7 +480,7 @@ public class Main {
     private static void showAdminMenu() {
         System.out.println("+---------------------------------+");
         System.out.println("| 1. change vehicle's hourly rate |");
-        System.out.println("| 2. Close the system             |");
+        System.out.println("| 2. go back                      |");
         System.out.println("+---------------------------------+");
     }
 
@@ -519,6 +520,7 @@ public class Main {
         System.out.println("| 1. See available slots          |");
         System.out.println("| 2. Customer                     |");
         System.out.println("| 3. Admin                        |");
+        System.out.println("| 4. exit                         |");
         System.out.println("+---------------------------------+");
     }
 
